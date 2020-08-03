@@ -9,8 +9,8 @@ namespace Dominio
         public string Descripcion { get; set; }
         public DateTime FechaPublicacion { get; set; }
         public byte[] FotoPortada { get; set; }
-        public Precio PrecioPromocion { get; set; }
-        public ICollection<Comentario> ComentarioLista { get; set; }
+        public Precio Precios { get; set; }
+        public ICollection<Comentario> Comentarios { get; set; }
         public ICollection<CursoInstructor> InstructoresLink { get; set; }
     }
 }
