@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Aplicacion.Cursos;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +33,9 @@ namespace WebAPI
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("CursosOnline"));
             });
+
+             services.AddMediatR(typeof(Consulta.Manejador).Assembly);
+            // services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddControllers();
         }
