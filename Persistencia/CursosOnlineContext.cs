@@ -13,6 +13,8 @@ namespace Persistencia
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CursoInstructor>().HasKey(ci => new { ci.InstructorId, ci.CursoId });
+            modelBuilder.Entity<Precio>().Property(p => p.PrecioActual).HasColumnType("decimal(19,4)");
+            modelBuilder.Entity<Precio>().Property(p => p.Promocion).HasColumnType("decimal(19,4)");
         }
 
         public DbSet<Comentario> Comentario { get; set; }
