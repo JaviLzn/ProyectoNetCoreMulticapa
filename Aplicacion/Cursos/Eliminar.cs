@@ -1,7 +1,9 @@
 using System;
 using System.Data.Common;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Aplicacion.ManejadorError;
 using MediatR;
 using Persistencia;
 
@@ -30,7 +32,7 @@ namespace Aplicacion.Cursos
 
                 if (curso == null)
                 {
-                    throw new Exception($"No se encuentra el curso a borrar {request.Id}");
+                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = $"No se encontró el curso {request.Id}" });
                 }
 
                 _context.Remove(curso);
