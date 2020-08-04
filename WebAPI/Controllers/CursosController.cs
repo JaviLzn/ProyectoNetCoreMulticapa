@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,10 @@ namespace WebAPI.Controllers
             return await _mediator.Send(datos);
         }
 
-
+        [HttpPut("{id}")]
+        public  async Task<ActionResult<Unit>> EditarCurso (int id, Editar.Ejecuta datos){
+            datos.CursoId = id;
+            return await _mediator.Send(datos);
+        }
     }
 }
