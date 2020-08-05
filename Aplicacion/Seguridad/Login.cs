@@ -12,7 +12,7 @@ namespace Aplicacion.Seguridad
 {
     public class Login
     {
-        public class Ejecuta : IRequest<Usuario>
+        public class Ejecuta : IRequest<UsuarioData>
         {
             public string Email { get; set; }
             public string Password { get; set; }
@@ -25,7 +25,7 @@ namespace Aplicacion.Seguridad
             }
         }
 
-        public class Manejador : IRequestHandler<Ejecuta, Usuario>
+        public class Manejador : IRequestHandler<Ejecuta, UsuarioData>
         {
             private readonly UserManager<Usuario> _userManager;
             private readonly SignInManager<Usuario> _signInManager;
@@ -34,7 +34,7 @@ namespace Aplicacion.Seguridad
                 _userManager = userManager;
                 _signInManager = signInManager;
             }
-            public async Task<Usuario> Handle(Ejecuta request, CancellationToken cancellationToken)
+            public async Task<UsuarioData> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
                 var usuario = await _userManager.FindByEmailAsync(request.Email);
                 if (usuario == null)
@@ -45,7 +45,13 @@ namespace Aplicacion.Seguridad
 
                 if (resultado.Succeeded)
                 {
-                    return usuario;
+                    return new UsuarioData {
+                        NombreCompleto = usuario.NombreCompleto,
+                        Token = "Token en construccion",
+                        UserName = usuario.UserName,
+                        Email = usuario.Email,
+                        Imagen = null
+                    };
                 }
 
                 throw new ManejadorExcepcion(HttpStatusCode.Unauthorized);
