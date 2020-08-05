@@ -7,7 +7,7 @@ using Aplicacion.Cursos;
 using Dominio;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
@@ -18,6 +18,7 @@ namespace WebAPI.Controllers
     {
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<Curso>>> ListarCursos()
         {
             return await Mediator.Send(new Consulta.ListaCursos());
