@@ -25,6 +25,8 @@ using Microsoft.IdentityModel.Tokens;
 using Persistencia;
 using Seguridad;
 using WebAPI.Middleware;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace WebAPI
 {
@@ -49,8 +51,14 @@ namespace WebAPI
             //Se configura el manejador MediatR
             services.AddMediatR(typeof(Consulta.Manejador).Assembly);
 
-            //Se configura el validador
-            services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
+
+            services.AddControllers(opt => {
+                //Se exige que todos los controllers esten autenticados
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
+            //Se configura el validador para todos los controllers
+            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
 
             // Se configura el IdentityCore
             var builder = services.AddIdentityCore<Usuario>();

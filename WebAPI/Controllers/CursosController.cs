@@ -18,7 +18,6 @@ namespace WebAPI.Controllers
     {
 
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<List<Curso>>> ListarCursos()
         {
             return await Mediator.Send(new Consulta.ListaCursos());
