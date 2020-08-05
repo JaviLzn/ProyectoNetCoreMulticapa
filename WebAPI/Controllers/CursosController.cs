@@ -11,9 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    //  [Route("api/[controller]/[action]")]
     public class CursosController : MiControllerBase
     {
 
