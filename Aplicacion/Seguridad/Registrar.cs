@@ -76,8 +76,12 @@ namespace Aplicacion.Seguridad
                    return new UsuarioData {
                        NombreCompleto = usuario.NombreCompleto,
                        Token = _jwtGenerador.CrearToken(usuario),
-                       UserName = usuario.UserName
+                       UserName = usuario.UserName,
+                       Email = usuario.Email
                    };
+                } else if(resultado.Errors.Count()  >0)
+                {
+                     throw new ManejadorExcepcion(HttpStatusCode.BadRequest, resultado.Errors);
                 }
 
                 throw new Exception("No se pudo agregar el nuevo usuario");
