@@ -14,9 +14,10 @@ namespace WebAPI.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly CursosOnlineContext context;
-        public WeatherForecastController(CursosOnlineContext _context)
+
+        public WeatherForecastController(CursosOnlineContext context)
         {
-            this.context = _context;
+            this.context = context;
         }
 
         [HttpGet]

@@ -28,29 +28,30 @@ namespace Aplicacion.Seguridad
 
         public class Manejador : IRequestHandler<Ejecuta, UsuarioData>
         {
-            private readonly UserManager<Usuario> _userManager;
-            private readonly SignInManager<Usuario> _signInManager;
-            private readonly IJwtGenerador _jwtGenerador;
+            private readonly UserManager<Usuario> userManager;
+            private readonly SignInManager<Usuario> signInManager;
+            private readonly IJwtGenerador jwtGenerador;
+
             public Manejador(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IJwtGenerador jwtGenerador)
             {
-                _userManager = userManager;
-                _signInManager = signInManager;
-                _jwtGenerador = jwtGenerador;
+                this.userManager = userManager;
+                this.signInManager = signInManager;
+                this.jwtGenerador = jwtGenerador;
             }
             public async Task<UsuarioData> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
-                var usuario = await _userManager.FindByEmailAsync(request.Email);
+                var usuario = await userManager.FindByEmailAsync(request.Email);
                 if (usuario == null)
                 {
                     throw new ManejadorExcepcion(HttpStatusCode.Unauthorized);
                 }
-                var resultado = await _signInManager.CheckPasswordSignInAsync(usuario, request.Password, false);
+                var resultado = await signInManager.CheckPasswordSignInAsync(usuario, request.Password, false);
 
                 if (resultado.Succeeded)
                 {
                     return new UsuarioData {
                         NombreCompleto = usuario.NombreCompleto,
-                        Token = _jwtGenerador.CrearToken(usuario),
+                        Token = jwtGenerador.CrearToken(usuario),
                         UserName = usuario.UserName,
                         Email = usuario.Email,
                         Imagen = null

@@ -39,25 +39,26 @@ namespace Aplicacion.Seguridad
 
         public class Manejador : IRequestHandler<Ejecuta, UsuarioData>
         {
-            private readonly CursosOnlineContext _context;
-            private readonly UserManager<Usuario> _userManager;
-            private readonly IJwtGenerador _jwtGenerador;
+            private readonly CursosOnlineContext context;
+            private readonly UserManager<Usuario> userManager;
+            private readonly IJwtGenerador jwtGenerador;
+
             public Manejador(CursosOnlineContext context, UserManager<Usuario> userManager, IJwtGenerador jwtGenerador)
             {
-                _context = context;
-                _userManager = userManager;
-                _jwtGenerador = jwtGenerador;
+                this.context = context;
+                this.userManager = userManager;
+                this.jwtGenerador = jwtGenerador;
             }
 
             public async Task<UsuarioData> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
-                var existeEmail = await _context.Users.Where(x => x.Email == request.Email).AnyAsync();
+                var existeEmail = await context.Users.Where(x => x.Email == request.Email).AnyAsync();
                 if (existeEmail)
                 {
                     throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "El Email se encuentra en uso."});
                 };
 
-                var existeUserName = await _context.Users.Where(x => x.UserName == request.UserName).AnyAsync();
+                var existeUserName = await context.Users.Where(x => x.UserName == request.UserName).AnyAsync();
                 if (existeUserName)
                 {
                     throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "El Nombre de Usuario ya se encuentra en uso."});
@@ -69,13 +70,13 @@ namespace Aplicacion.Seguridad
                     UserName = request.UserName
                 };
 
-                var resultado = await _userManager.CreateAsync(usuario, request.Password);
+                var resultado = await userManager.CreateAsync(usuario, request.Password);
 
                 if (resultado.Succeeded)
                 {
                    return new UsuarioData {
                        NombreCompleto = usuario.NombreCompleto,
-                       Token = _jwtGenerador.CrearToken(usuario),
+                       Token = jwtGenerador.CrearToken(usuario),
                        UserName = usuario.UserName,
                        Email = usuario.Email
                    };

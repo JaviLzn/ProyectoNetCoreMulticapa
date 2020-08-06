@@ -17,15 +17,16 @@ namespace Aplicacion.Cursos
 
         public class Manejador : IRequestHandler<CursoUnico, Curso>
         {
-            private readonly CursosOnlineContext _context;
+            private readonly CursosOnlineContext context;
+
             public Manejador(CursosOnlineContext context)
             {
-                _context = context;
+                this.context = context;
             }
 
             public async Task<Curso> Handle(CursoUnico request, CancellationToken cancellationToken)
             {
-                var curso = await _context.Curso.FindAsync(request.Id);
+                var curso = await context.Curso.FindAsync(request.Id);
 
                 if (curso is null)
                 {

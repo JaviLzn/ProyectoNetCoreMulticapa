@@ -29,10 +29,11 @@ namespace Aplicacion.Cursos
 
         public class Manejador : IRequestHandler<Ejecuta>
         {
-            private readonly CursosOnlineContext _context;
+            private readonly CursosOnlineContext context;
+
             public Manejador(CursosOnlineContext context)
             {
-                _context = context;
+                this.context = context;
             }
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
@@ -43,8 +44,8 @@ namespace Aplicacion.Cursos
                     FechaPublicacion = request.FechaPublicacion
                 };
 
-                _context.Curso.Add(curso);
-                var valor = await _context.SaveChangesAsync();
+                context.Curso.Add(curso);
+                var valor = await context.SaveChangesAsync();
 
                 if (valor > 0)
                 {

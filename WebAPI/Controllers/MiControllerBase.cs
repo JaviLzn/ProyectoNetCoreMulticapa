@@ -8,8 +8,8 @@ namespace WebAPI.Controllers
     [ApiController]
     public class MiControllerBase : ControllerBase
     {
-        private IMediator _mediator;
+        private IMediator mediator;
 
-        protected IMediator Mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
+        protected IMediator Mediator => mediator ?? (mediator = HttpContext.RequestServices.GetService<IMediator>());
     }
 }

@@ -11,23 +11,24 @@ namespace WebAPI.Middleware
 {
     public class ManejadorErroresMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<ManejadorErroresMiddleware> _logger;
+        private readonly RequestDelegate next;
+        private readonly ILogger<ManejadorErroresMiddleware> logger;
+
         public ManejadorErroresMiddleware(RequestDelegate next, ILogger<ManejadorErroresMiddleware> logger)
         {
-            _next = next;
-            _logger = logger;
+            this.next = next;
+            this.logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (Exception ex)
             {
-                await ManejadorExcepcionAsync(context, ex, _logger);
+                await ManejadorExcepcionAsync(context, ex, logger);
             }
         }
 

@@ -35,14 +35,15 @@ namespace Aplicacion.Cursos
 
         public class Manejador : IRequestHandler<Ejecuta>
         {
-            private readonly CursosOnlineContext _context;
+            private readonly CursosOnlineContext context;
+
             public Manejador(CursosOnlineContext context)
             {
-                _context = context;
+                this.context = context;
             }
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
-                var curso = await _context.Curso.FindAsync(request.CursoId);
+                var curso = await context.Curso.FindAsync(request.CursoId);
                 if (curso == null)
                 {
                     throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = $"No se encontró el curso {request.CursoId}" });
@@ -52,7 +53,7 @@ namespace Aplicacion.Cursos
                 curso.Descripcion = request.Descripcion ?? curso.Descripcion;
                 curso.FechaPublicacion = request.FechaPublicacion ?? curso.FechaPublicacion;
 
-                var valor = await _context.SaveChangesAsync();
+                var valor = await context.SaveChangesAsync();
 
                 if (valor > 0)
                 {
