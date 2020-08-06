@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Aplicacion.Seguridad;
 using Microsoft.AspNetCore.Authorization;
@@ -19,5 +20,11 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<UsuarioData>> Registrar (Registrar.Ejecuta datos) {
             return await Mediator.Send(datos);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<UsuarioData>> UsuarioActual () {
+            return await Mediator.Send(new UsuarioActual.Ejecuta());
+        }
+        
     }
 }
