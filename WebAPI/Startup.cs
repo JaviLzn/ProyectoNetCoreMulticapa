@@ -83,6 +83,7 @@ namespace WebAPI
 
             //Se configura servicio para JWT
             services.AddScoped<IJwtGenerador, JwtGenerador>();
+            services.AddScoped<IUsuarioSesion, UsuarioSesion>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
