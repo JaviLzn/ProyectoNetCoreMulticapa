@@ -32,18 +32,20 @@ namespace Aplicacion.Cursos
             public async Task<CursoDTO> Handle(CursoUnico request, CancellationToken cancellationToken)
             {
                 var curso = await context.Curso
-                                        .Include(x => x.InstructoresLink)
-                                        .ThenInclude(x => x.Instructor)
-                                        .FirstOrDefaultAsync(x=> x.CursoId == request.Id);
+                    .Include(x => x.Precios)
+                    .Include(y => y.Comentarios)
+                    .Include(x => x.InstructoresLink)
+                        .ThenInclude(x => x.Instructor)
+                    .FirstOrDefaultAsync(x=> x.CursoId == request.Id);
 
                 if (curso is null)
                 {
                     throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = $"No se encontró el curso {request.Id}" });
                 }
 
-                var cursoDto = mapper.Map<CursoDTO>(curso);
+                CursoDTO cursoDTO = mapper.Map<CursoDTO>(curso);
 
-                return cursoDto;
+                return cursoDTO;
             }
         }
 

@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,11 +30,13 @@ namespace Aplicacion.Cursos
             public async Task<List<CursoDTO>> Handle(ListaCursos request, CancellationToken cancellationToken)
             {
                 var cursos = await context.Curso
-                                             .Include(x => x.InstructoresLink)
-                                             .ThenInclude(x => x.Instructor)
-                                             .ToListAsync();
+                    .Include(x => x.Precios)
+                    .Include(y => y.Comentarios)
+                    .Include(x => x.InstructoresLink)
+                        .ThenInclude(x => x.Instructor)
+                    .ToListAsync();
 
-                var cursoDTO = mapper.Map<List<Curso>, List<CursoDTO>>(cursos);
+                var cursoDTO = mapper.Map<List<CursoDTO>>(cursos);
                 return cursoDTO;
             }
         }
