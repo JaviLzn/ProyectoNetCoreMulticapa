@@ -1,9 +1,12 @@
+using System.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Aplicacion.ManejadorError;
+using AutoMapper;
 using Dominio;
 using FluentValidation;
 using MediatR;
@@ -16,11 +19,11 @@ namespace Aplicacion.Cursos
     {
         public class Ejecuta : IRequest
         {
-            public int CursoId { get; set; }
+            public Guid CursoId { get; set; }
             public string Titulo { get; set; }
             public string Descripcion { get; set; }
             public DateTime? FechaPublicacion { get; set; }
-
+            public List<Guid> ListaInstructor { get; set; }
         }
 
         public class EjecutaValidacion : AbstractValidator<Ejecuta>
@@ -36,10 +39,12 @@ namespace Aplicacion.Cursos
         public class Manejador : IRequestHandler<Ejecuta>
         {
             private readonly CursosOnlineContext context;
+            private readonly IMapper mapper;
 
-            public Manejador(CursosOnlineContext context)
+            public Manejador(CursosOnlineContext context, IMapper mapper)
             {
                 this.context = context;
+                this.mapper = mapper;
             }
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
@@ -52,6 +57,26 @@ namespace Aplicacion.Cursos
                 curso.Titulo = request.Titulo ?? curso.Titulo;
                 curso.Descripcion = request.Descripcion ?? curso.Descripcion;
                 curso.FechaPublicacion = request.FechaPublicacion ?? curso.FechaPublicacion;
+
+                if (request.ListaInstructor != null)
+                {
+                    if(request.ListaInstructor.Count > 0){
+                        //Borrar las relaciones actuales
+                        var ListCursoInstructor = context.CursoInstructor.Where(x => x.CursoId == request.CursoId);
+                        foreach (var cursoInstructor in ListCursoInstructor)
+                        {
+                            context.CursoInstructor.Remove(cursoInstructor);
+                        }
+                        //Insertar las nuevas relaciones
+                        foreach (var id in request.ListaInstructor)
+                        {
+                            context.CursoInstructor.Add(new CursoInstructor{
+                                CursoId = request.CursoId,
+                                InstructorId = id
+                            });
+                        }
+                    } 
+                }
 
                 var valor = await context.SaveChangesAsync();
 

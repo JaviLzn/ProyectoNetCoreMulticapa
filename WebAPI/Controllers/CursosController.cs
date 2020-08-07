@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public  async Task<ActionResult<Unit>> EditarCurso (int id, Editar.Ejecuta datos){
+        public  async Task<ActionResult<Unit>> EditarCurso (Guid id, Editar.Ejecuta datos){
             datos.CursoId = id;
             return await Mediator.Send(datos);
         }
