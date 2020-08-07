@@ -14,26 +14,44 @@ namespace Persistencia.DapperConexion.Instructor
         {
             this.factoryConnection = factoryConnection;
         }
-        public Task<int> Actualizar(InstructorModel datos)
+        public async Task<int> Actualizar(InstructorModel datos)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> Crear(InstructorModel datos)
-        {
-            var StoredProcedure = "usp_Instructor_Nuevo";
+            var UserStoredProcedure = "usp_Instructor_Editar";
             try
             {
-                datos.InstructorId = Guid.NewGuid();
                 var connection = factoryConnection.GetConnection();
-                var resultado = await connection.ExecuteAsync(StoredProcedure, datos, commandType: CommandType.StoredProcedure);
-                factoryConnection.CloseConnection();
+                var resultado = await connection.ExecuteAsync(UserStoredProcedure, datos, commandType: CommandType.StoredProcedure);
                 return resultado;
             }
             catch (Exception e)
             {
+                throw new Exception("Error en la actualizacion de instructor desde USp", e);
+            }
+            finally
+            {
                 factoryConnection.CloseConnection();
-                throw new Exception("Error en la consulta de SPs", e);
+            }
+        }
+
+        public async Task<int> Crear(InstructorModel datos)
+        {
+            var UserStoredProcedure = "usp_Instructor_Nuevo";
+            try
+            {
+                datos.InstructorId = Guid.NewGuid();
+                var connection = factoryConnection.GetConnection();
+                var resultado = await connection.ExecuteAsync(UserStoredProcedure,
+                                                              datos,
+                                                              commandType: CommandType.StoredProcedure);
+                return resultado;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error en la creación de instructor desde USp", e);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
             }
         }
 
