@@ -19,9 +19,22 @@ namespace Persistencia.DapperConexion.Instructor
             throw new NotImplementedException();
         }
 
-        public Task<int> Crear(InstructorModel datos)
+        public async Task<int> Crear(InstructorModel datos)
         {
-            throw new NotImplementedException();
+            var StoredProcedure = "usp_Instructor_Nuevo";
+            try
+            {
+                datos.InstructorId = Guid.NewGuid();
+                var connection = factoryConnection.GetConnection();
+                var resultado = await connection.ExecuteAsync(StoredProcedure, datos, commandType: CommandType.StoredProcedure);
+                factoryConnection.CloseConnection();
+                return resultado;
+            }
+            catch (Exception e)
+            {
+                factoryConnection.CloseConnection();
+                throw new Exception("Error en la consulta de SPs", e);
+            }
         }
 
         public Task<int> Eliminar(InstructorModel datos)
@@ -32,7 +45,7 @@ namespace Persistencia.DapperConexion.Instructor
         public async Task<IEnumerable<InstructorModel>> ObtenerLista()
         {
             IEnumerable<InstructorModel> ListaInstructor = null;
-            var storedProcedura = "usp_Obtener_Instructores";
+            var storedProcedura = "usp_Instructor_Obtener_Lista";
             try
             {
                 var connection = factoryConnection.GetConnection();
