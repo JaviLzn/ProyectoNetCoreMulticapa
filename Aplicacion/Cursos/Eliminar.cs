@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Aplicacion.Cursos
     {
         public class Ejecuta : IRequest
         {
-            public int Id { get; set; }
+            public Guid Id { get; set; }
         }
 
 
@@ -28,6 +29,13 @@ namespace Aplicacion.Cursos
 
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
+                var listaCursoInstructor = context.CursoInstructor.Where(x => x.CursoId == request.Id);
+                foreach (var cursoInstructor in listaCursoInstructor)
+                {
+                    context.CursoInstructor.Remove(cursoInstructor);
+                }
+
+
                 var curso = await context.Curso.FindAsync(request.Id);
 
                 if (curso == null)
