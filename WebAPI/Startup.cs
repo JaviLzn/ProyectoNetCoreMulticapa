@@ -28,6 +28,8 @@ using WebAPI.Middleware;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using AutoMapper;
+using Persistencia.DapperConexion;
+using Persistencia.DapperConexion.Instructor;
 
 namespace WebAPI
 {
@@ -49,11 +51,15 @@ namespace WebAPI
                 opt.UseSqlServer(Configuration.GetConnectionString("CursosOnline"));
             });
 
+            // * Cadena de Conexion para Dapper
+            services.AddOptions();
+            services.Configure<DapperConfiguracion>(Configuration.GetSection("ConnectionStrings"));
             //Se configura el manejador MediatR
             services.AddMediatR(typeof(Consulta.Manejador).Assembly);
 
 
-            services.AddControllers(opt => {
+            services.AddControllers(opt =>
+            {
                 //Se exige que todos los controllers esten autenticados
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
@@ -86,6 +92,9 @@ namespace WebAPI
             services.AddScoped<IJwtGenerador, JwtGenerador>();
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();
             services.AddAutoMapper(typeof(Consulta.Manejador));
+
+            services.AddTransient<IFactoryConnection, FactoryConnection>();
+            services.AddScoped<IInstructor, InstructorRepositorio>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
