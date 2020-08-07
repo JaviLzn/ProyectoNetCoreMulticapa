@@ -24,6 +24,8 @@ namespace Aplicacion.Cursos
             public string Descripcion { get; set; }
             public DateTime? FechaPublicacion { get; set; }
             public List<Guid> ListaInstructor { get; set; }
+            public decimal? Precio { get; set; }
+            public decimal? PrecioPromocion { get; set; }
         }
 
         public class EjecutaValidacion : AbstractValidator<Ejecuta>
@@ -58,9 +60,30 @@ namespace Aplicacion.Cursos
                 curso.Descripcion = request.Descripcion ?? curso.Descripcion;
                 curso.FechaPublicacion = request.FechaPublicacion ?? curso.FechaPublicacion;
 
+                /* Actualizar el precio del curso*/
+                Precio precio = await context.Precio.Where(x => x.CursoId == curso.CursoId).FirstOrDefaultAsync();
+                if (precio == null)
+                {
+                    await context.Precio.AddAsync(new Precio
+                    {
+                        PrecioId = Guid.NewGuid(),
+                        PrecioActual = request.Precio ?? 0,
+                        Promocion = request.PrecioPromocion ?? 0,
+                        CursoId = curso.CursoId
+                    });
+                }
+                else
+                {
+                    precio.PrecioActual = request.Precio ?? precio.PrecioActual;
+                    precio.Promocion = request.PrecioPromocion ?? precio.Promocion;
+                }
+
+
+
                 if (request.ListaInstructor != null)
                 {
-                    if(request.ListaInstructor.Count > 0){
+                    if (request.ListaInstructor.Count > 0)
+                    {
                         //Borrar las relaciones actuales
                         var ListCursoInstructor = context.CursoInstructor.Where(x => x.CursoId == request.CursoId);
                         foreach (var cursoInstructor in ListCursoInstructor)
@@ -70,12 +93,13 @@ namespace Aplicacion.Cursos
                         //Insertar las nuevas relaciones
                         foreach (var id in request.ListaInstructor)
                         {
-                            context.CursoInstructor.Add(new CursoInstructor{
+                            context.CursoInstructor.Add(new CursoInstructor
+                            {
                                 CursoId = request.CursoId,
                                 InstructorId = id
                             });
                         }
-                    } 
+                    }
                 }
 
                 var valor = await context.SaveChangesAsync();
