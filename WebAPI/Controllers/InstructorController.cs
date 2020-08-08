@@ -1,3 +1,4 @@
+using System;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,15 +9,24 @@ using Persistencia.DapperConexion.Instructor;
 
 namespace WebAPI.Controllers
 {
-    public class InstructorController: MiControllerBase
+    public class InstructorController : MiControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<InstructorModel>>> ListaInstructores () {
+        public async Task<ActionResult<List<InstructorModel>>> ListaInstructores()
+        {
             return await Mediator.Send(new Consulta.Peticion());
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> CrearInstructor(Nuevo.CrearInstructor datos){
+        public async Task<ActionResult<Unit>> CrearInstructor(Nuevo.CrearInstructor datos)
+        {
+            return await Mediator.Send(datos);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Unit>> Actualizar(Guid id, Editar.EditarInstructor datos)
+        {
+            datos.InstructorId = id;
             return await Mediator.Send(datos);
         }
     }
