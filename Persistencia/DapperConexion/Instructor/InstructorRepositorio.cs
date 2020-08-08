@@ -83,6 +83,7 @@ namespace Persistencia.DapperConexion.Instructor
             {
                 var connection = factoryConnection.GetConnection();
                 ListaInstructor = await connection.QueryAsync<InstructorModel>(storedProcedura, null, commandType: CommandType.StoredProcedure);
+                return ListaInstructor;
             }
             catch (Exception e)
             {
@@ -93,12 +94,26 @@ namespace Persistencia.DapperConexion.Instructor
                 factoryConnection.CloseConnection();
             }
 
-            return ListaInstructor;
         }
 
-        public Task<InstructorModel> ObtenerPorId(Guid id)
+        public async Task<InstructorModel> ObtenerPorId(Guid id)
         {
-            throw new NotImplementedException();
+            var storedProcedura = "usp_Instructor_Obtener_PorId";
+            try
+            {
+                var connection = factoryConnection.GetConnection();
+                var param = new { Id = id };
+                InstructorModel instructor = await connection.QueryFirstAsync<InstructorModel>(storedProcedura, param, commandType: CommandType.StoredProcedure);
+                return instructor;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error en la consulta de Instructor por Id", e);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
         }
     }
 }
