@@ -24,10 +24,17 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Unit>> Actualizar(Guid id, Editar.EditarInstructor datos)
+        public async Task<ActionResult<Unit>> ActualizarInstructor(Guid id, Editar.EditarInstructor datos)
         {
             datos.InstructorId = id;
             return await Mediator.Send(datos);
+        }
+
+        [HttpDelete("{id}")]
+
+        public async Task<ActionResult<Unit>> EliminarInstructor(Guid id)
+        {
+            return await Mediator.Send(new Eliminar.BorrarInstructor { Id = id });
         }
     }
 }
