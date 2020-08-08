@@ -59,6 +59,7 @@ namespace Aplicacion.Cursos
                 curso.Titulo = request.Titulo ?? curso.Titulo;
                 curso.Descripcion = request.Descripcion ?? curso.Descripcion;
                 curso.FechaPublicacion = request.FechaPublicacion ?? curso.FechaPublicacion;
+                curso.FechaCreacion = DateTime.UtcNow;
 
                 /* Actualizar el precio del curso*/
                 Precio precio = await context.Precio.Where(x => x.CursoId == curso.CursoId).FirstOrDefaultAsync();
