@@ -31,10 +31,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-
         public async Task<ActionResult<Unit>> EliminarInstructor(Guid id)
         {
             return await Mediator.Send(new Eliminar.BorrarInstructor { Id = id });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<InstructorModel>> InstructorPorId (Guid id){
+            return await Mediator.Send( new ConsultaId.ObtenerInstructorPorId{Id = id});
         }
     }
 }
