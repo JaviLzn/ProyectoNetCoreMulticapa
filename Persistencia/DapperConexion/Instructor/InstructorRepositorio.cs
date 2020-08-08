@@ -25,7 +25,7 @@ namespace Persistencia.DapperConexion.Instructor
             }
             catch (Exception e)
             {
-                throw new Exception("Error en la actualizacion de instructor desde USp", e);
+                throw new Exception("Error en la actualización de instructor desde USp", e);
             }
             finally
             {
@@ -55,9 +55,24 @@ namespace Persistencia.DapperConexion.Instructor
             }
         }
 
-        public Task<int> Eliminar(InstructorModel datos)
+        public async Task<int> Eliminar(Guid id)
         {
-            throw new NotImplementedException();
+            var UserStoredProcedure = "usp_Instructor_Eliminar";
+            try
+            {
+                var connection = factoryConnection.GetConnection();
+                var param = new { InstructorId = id };
+                var resultado = await connection.ExecuteAsync(UserStoredProcedure, param, commandType: CommandType.StoredProcedure);
+                return resultado;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error en la eliminación de instructor desde USp", e);
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
         }
 
         public async Task<IEnumerable<InstructorModel>> ObtenerLista()
