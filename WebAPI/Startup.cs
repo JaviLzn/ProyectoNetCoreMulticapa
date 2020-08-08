@@ -31,6 +31,7 @@ using AutoMapper;
 using Persistencia.DapperConexion;
 using Persistencia.DapperConexion.Instructor;
 using Microsoft.OpenApi.Models;
+using Persistencia.DapperConexion.Paginacion;
 
 namespace WebAPI
 {
@@ -94,8 +95,10 @@ namespace WebAPI
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();
             services.AddAutoMapper(typeof(Consulta.Manejador));
 
+            // Dapper 
             services.AddTransient<IFactoryConnection, FactoryConnection>();
             services.AddScoped<IInstructor, InstructorRepositorio>();
+            services.AddScoped<IPaginacion, PaginacionRepositorio>();
 
             // * Se configura servicios de Swagger
             services.AddSwaggerGen(c =>
