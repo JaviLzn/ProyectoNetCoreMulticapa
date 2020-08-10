@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,11 +48,15 @@ namespace Aplicacion.Seguridad
                 }
                 var resultado = await signInManager.CheckPasswordSignInAsync(usuario, request.Password, false);
 
+                var rolesUsuario = await userManager.GetRolesAsync(usuario);
+                var listaRoles = new List<string>(rolesUsuario);
+                
+                
                 if (resultado.Succeeded)
                 {
                     return new UsuarioData {
                         NombreCompleto = usuario.NombreCompleto,
-                        Token = jwtGenerador.CrearToken(usuario),
+                        Token = jwtGenerador.CrearToken(usuario, listaRoles),
                         UserName = usuario.UserName,
                         Email = usuario.Email,
                         Imagen = null
