@@ -67,7 +67,7 @@ namespace Aplicacion.Seguridad
                                                  new { mensaje = "No se encuentra el usuario con este UserName" });
                 }
 
-                var correoUsado = await context.Users.Where(x => x.Email == request.Email && x.UserName == usuario.UserName).AnyAsync();
+                var correoUsado = await context.Users.Where(x => x.Email == request.Email && x.UserName != usuario.UserName).AnyAsync();
                 if (correoUsado)
                 {
                     throw new ManejadorExcepcion(HttpStatusCode.InternalServerError,
