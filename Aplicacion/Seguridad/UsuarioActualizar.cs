@@ -20,8 +20,7 @@ namespace Aplicacion.Seguridad
     {
         public class Ejecuta : IRequest<UsuarioData>
         {
-            public string Nombre { get; set; }
-            public string Apellidos { get; set; }
+            public string NombreCompleto { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
             public string UserName { get; set; }
@@ -32,8 +31,7 @@ namespace Aplicacion.Seguridad
         {
             public ValidarEjecuta()
             {
-                RuleFor(x => x.Nombre).NotEmpty();
-                RuleFor(x => x.Apellidos).NotEmpty();
+                RuleFor(x => x.NombreCompleto).NotEmpty();
                 RuleFor(x => x.Email).NotEmpty();
                 RuleFor(x => x.Password).NotEmpty();
                 RuleFor(x => x.UserName).NotEmpty();
@@ -74,7 +72,7 @@ namespace Aplicacion.Seguridad
                                                  new { mensaje = "No este email ya está usado por otro usuario." });
                 }
 
-                usuario.NombreCompleto = $"{request.Nombre} {request.Apellidos}";
+                usuario.NombreCompleto = request.NombreCompleto;
                 usuario.PasswordHash = passwordHasher.HashPassword(usuario, request.Password);
                 usuario.Email = request.Email;
 
