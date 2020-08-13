@@ -1,3 +1,5 @@
+using System.Reflection.Metadata;
+using System.Collections.Immutable;
 using System.Text;
 using System;
 using System.Collections.Generic;
@@ -47,6 +49,12 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // * Se habilita CORS
+            services.AddCors(opt => opt.AddPolicy("corsApp", builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
+
             // Se configura servicio para la base de datos
             services.AddDbContext<CursosOnlineContext>(opt =>
             {
@@ -108,7 +116,7 @@ namespace WebAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Servicio para mantenimiento de cursos", Version = "v1" });
-                c.CustomSchemaIds( c=> c.FullName);
+                c.CustomSchemaIds(c => c.FullName);
             });
 
         }
@@ -116,6 +124,8 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseCors("corsApp");
 
             // Manejador de Errores Personalizado
             app.UseMiddleware<ManejadorErroresMiddleware>();
