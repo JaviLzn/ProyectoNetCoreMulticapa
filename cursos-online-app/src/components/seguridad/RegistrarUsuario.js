@@ -9,13 +9,10 @@ const RegistrarUsuario = () => {
                 <Typography component='h1' variant='h5'>
                     Registro de usuario
                 </Typography>
-                <form style={style.form}>
+                <form style={style.form} autoComplete='off'>
                     <Grid container spacing={2} justify='center'>
                         <Grid item xs={12} >
-                            <TextField name='nombre' variant='outlined' fullWidth label="Ingrese su nombre" />
-                        </Grid>
-                        <Grid item xs={12} >
-                            <TextField name='apellidos' variant='outlined' fullWidth label="Ingrese sus apellidos" />
+                            <TextField name='nombrecompleto' variant='outlined' fullWidth label="Ingrese su nombre y apellidos" />
                         </Grid>
                         <Grid item xs={12} >
                             <TextField name='email' type='email' variant='outlined' fullWidth label="Ingrese su email" />
