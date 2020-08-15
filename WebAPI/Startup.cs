@@ -75,7 +75,13 @@ namespace WebAPI
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })
             //Se configura el validador para todos los controllers
-            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
+            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>())
+            //
+            .AddJsonOptions(jsonOptions =>
+                {
+                    jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
+
 
             // Se configura el IdentityCore
             var builder = services.AddIdentityCore<Usuario>();

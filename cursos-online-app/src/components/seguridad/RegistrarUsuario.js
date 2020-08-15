@@ -22,7 +22,10 @@ const RegistrarUsuario = () => {
         e.preventDefault();
         register(usuario).then((response) => {
             console.log('se registró', response);
+            window.localStorage.setItem("token_seguridad", response.data.Token);
         });
+
+        
     };
 
     return (

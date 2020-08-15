@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Aplicacion.ManejadorError;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace WebAPI.Middleware
 {
@@ -53,7 +53,7 @@ namespace WebAPI.Middleware
             context.Response.ContentType = "application/json";
             if (errores != null)
             {
-                var resultados = JsonConvert.SerializeObject(new { errores });
+                var resultados = JsonSerializer.Serialize(new { errores });
                 await context.Response.WriteAsync(resultados);
             }
 
