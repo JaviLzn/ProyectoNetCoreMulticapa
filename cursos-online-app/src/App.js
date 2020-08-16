@@ -1,15 +1,26 @@
 import React from 'react';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
-import { TextField, Button } from '@material-ui/core';
+import Login from './components/seguridad/Login';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import RegistrarUsuario from './components/seguridad/RegistrarUsuario';
+import PerfilUsuario from './components/seguridad/PerfilUsuario';
+import AppNavbar from './components/navegacion/AppNavbar';
 
 function App() {
     return (
-        <MuiThemeProvider theme={theme}>
-            <h1>Proyecto en blanco</h1>
-            <TextField variant="outlined" />
-            <Button variant="contained" color="primary">Mi boton Material Design</Button>
-        </MuiThemeProvider>
+        <Router>
+            <ThemeProvider theme={theme}>
+                <AppNavbar />
+                <Switch>
+                    <Route exact path='/' component={Login} />
+                    <Route exact path='/auth/login' component={Login} />
+                    <Route exact path='/auth/registrar' component={RegistrarUsuario} />
+                    <Route exact path='/auth/perfil' component={PerfilUsuario} />
+                </Switch>
+            </ThemeProvider>
+        </Router>
     );
 }
 
