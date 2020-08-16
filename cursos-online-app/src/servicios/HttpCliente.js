@@ -21,4 +21,10 @@ const requestGeneric = {
     delete: (url) => axios.delete(url),
 };
 
+// Capturar el request
+// axios.interceptors.request.use(request => {
+//     console.log('Starting Request', request)
+//     return request
+//   });
+
 export default requestGeneric;
