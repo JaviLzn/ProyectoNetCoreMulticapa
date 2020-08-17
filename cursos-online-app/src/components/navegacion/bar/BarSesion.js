@@ -2,7 +2,7 @@ import React from 'react';
 import { Toolbar, IconButton, Typography, Button, Avatar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     seccionDesktop: {
