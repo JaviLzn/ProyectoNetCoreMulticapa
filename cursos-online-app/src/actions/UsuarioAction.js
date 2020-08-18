@@ -11,8 +11,17 @@ export const register = (usuario) => {
     });
 };
 
-export const obtenerUsuarioActual = () => {
-    return new Promise((resolve, reject) => instancia.get('/Usuario').then((response) => resolve(response)));
+export const obtenerUsuarioActual = (dispatch) => {
+    return new Promise((resolve, reject) =>
+    HttpCliente.get('/Usuario').then((response) => {
+            dispatch({
+                type: 'INICIAR_SESION',
+                sesion: response.data,
+                autenticado: true,
+            });
+            resolve(response);
+        })
+    );
 };
 
 export const actualizarUsuario = (usuario) => {
