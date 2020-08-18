@@ -3,6 +3,7 @@ import { Toolbar, IconButton, Typography, Button, Avatar } from '@material-ui/co
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
+import { useStateValue } from '../../../context/store';
 
 const useStyles = makeStyles((theme) => ({
     seccionDesktop: {
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
 
 const BarSesion = () => {
     const classes = useStyles();
+
+     const [{ sesionUsuario }] = useStateValue();
+
     return (
         <Toolbar>
             <IconButton color='inherit'>
@@ -37,9 +41,11 @@ const BarSesion = () => {
             
 
             <div className={classes.seccionDesktop}>
-                <Button color='inherit'>Salir</Button>
-                <Button color='inherit'>{'Nombre de usuario'}</Button>
+                <Button color='inherit'>
+                    {sesionUsuario ? sesionUsuario.usuario.NombreCompleto: ''}
+                </Button>
                 <Avatar />
+                <Button color='inherit'>Salir</Button>
             </div>
 
             <div className={classes.seccionMobile}>
