@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import style from '../Tool/Style';
 import { Container, Typography, Grid, TextField, Button } from '@material-ui/core';
 import { obtenerUsuarioActual, actualizarUsuario } from '../../actions/UsuarioAction';
+import { useStateValue } from '../../context/store';
 
 const PerfilUsuario = () => {
+    const [, dispatch] = useStateValue();
+
     const [usuario, setUsuario] = useState({
         NombreCompleto: '',
         Email: '',
@@ -18,7 +21,7 @@ const PerfilUsuario = () => {
     };
 
     useEffect(() => {
-        obtenerUsuarioActual().then((response) => {
+        obtenerUsuarioActual(dispatch).then((response) => {
             console.log('response obtenerUsuarioActual :>> ', response);
             setUsuario(response.data);
         });
@@ -27,8 +30,18 @@ const PerfilUsuario = () => {
     const guardarUsuario = (e) => {
         e.preventDefault();
         actualizarUsuario(usuario).then((response) => {
-            console.log('response guardarUsuario', response);
-            window.localStorage.setItem('token_seguridad', response.data.Token);
+            if (response.status === 200) {
+                dispatch({
+                    type: 'OPEN_SNACKBAR',
+                    openMensaje: { open: true, mensaje: 'Se guardó correctamente el perfil del usuario' },
+                });
+                window.localStorage.setItem('token_seguridad', response.data.Token);
+            } else {
+                dispatch({
+                    type: 'OPEN_SNACKBAR',
+                    openMensaje: { open: true, mensaje: 'Errores al intentar guardar en:' + Object.keys(response.data.errors) },
+                });
+            }
         });
     };
 

@@ -13,7 +13,7 @@ export const register = (usuario) => {
 
 export const obtenerUsuarioActual = (dispatch) => {
     return new Promise((resolve, reject) =>
-    HttpCliente.get('/Usuario').then((response) => {
+        HttpCliente.get('/Usuario').then((response) => {
             dispatch({
                 type: 'INICIAR_SESION',
                 sesion: response.data,
@@ -25,7 +25,13 @@ export const obtenerUsuarioActual = (dispatch) => {
 };
 
 export const actualizarUsuario = (usuario) => {
-    return new Promise((resolve, reject) => HttpCliente.put('/Usuario', usuario).then((response) => resolve(response)));
+    return new Promise((resolve, reject) => {
+        HttpCliente.put('/Usuario', usuario)
+            .then((response) => resolve(response))
+            .catch((err) => {
+                resolve(err.response);
+            });
+    });
 };
 
 export const loginUsuario = (usuario) => {
