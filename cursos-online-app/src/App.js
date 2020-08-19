@@ -36,7 +36,7 @@ function App() {
                 <ThemeProvider theme={theme}>
                     <AppNavbar />
                     <Switch>
-                        <Route exact path='/' component={PerfilUsuario} />
+                        <Route exact path='/' component={Login} />
                         <Route exact path='/auth/login' component={Login} />
                         <Route exact path='/auth/registrar' component={RegistrarUsuario} />
                         <Route exact path='/auth/perfil' component={PerfilUsuario} />
