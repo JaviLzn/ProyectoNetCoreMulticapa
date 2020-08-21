@@ -1,11 +1,13 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Toolbar, IconButton, Typography, Button, Avatar, Drawer } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import { useStateValue } from '../../../context/store';
 import MenuIzquierda from './MenuIzquierda';
+import MenuDerecha from './MenuDerecha';
+import { useHistory } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     seccionDesktop: {
@@ -40,27 +42,37 @@ const useStyles = makeStyles((theme) => ({
 
 const BarSesion = () => {
     const classes = useStyles();
+    let history = useHistory();
 
     const [{ sesionUsuario }] = useStateValue();
 
-    const [abrirMenuIzq, setAbrirMenuIzq] = useState(false);
+    const [menuIzq, setMenuIzq] = useState(false);
+    const [menuDer, setMenuDer] = useState(false);
 
-    const cerrarMenuIzq = () => {
-        setAbrirMenuIzq(false);
-    };
+    const abrirMenuIzq = () => setMenuIzq(true);
+    const cerrarMenuIzq = () => setMenuIzq(false);
+    const abrirMenuDer = () => setMenuDer(true);
+    const cerrarMenuDer = () => setMenuDer(false);
 
-    const abrirMenuIzqAction = () => {
-        setAbrirMenuIzq(true);
+    const salirSesion = () => {
+        localStorage.removeItem('token_seguridad');
+        history.push("/auth/login");
     };
-    
 
     return (
         <Fragment>
-            <Drawer open={abrirMenuIzq} onClose={cerrarMenuIzq} anchor='left' >
-                <MenuIzquierda classes={classes}/>
+            <Drawer anchor='left' open={menuIzq} onClose={cerrarMenuIzq}>
+                <div className={classes.list} onClick={cerrarMenuIzq} onKeyDown={cerrarMenuIzq}>
+                    <MenuIzquierda classes={classes} />
+                </div>
+            </Drawer>
+            <Drawer anchor='right' open={menuDer} onClose={cerrarMenuDer}>
+                <div className={classes.list} onClick={cerrarMenuDer} onKeyDown={cerrarMenuDer}>
+                    <MenuDerecha classes={classes} usuario={sesionUsuario ? sesionUsuario.usuario : null} salirSesion={salirSesion}/>
+                </div>
             </Drawer>
             <Toolbar>
-                <IconButton color='inherit' onClick={abrirMenuIzqAction}>
+                <IconButton color='inherit' onClick={abrirMenuIzq}>
                     <MenuIcon />
                 </IconButton>
                 <Typography variant='h6' className={classes.grow}>
@@ -70,11 +82,11 @@ const BarSesion = () => {
                 <div className={classes.seccionDesktop}>
                     <Button color='inherit'>{sesionUsuario ? sesionUsuario.usuario.NombreCompleto : ''}</Button>
                     <Avatar />
-                    <Button color='inherit'>Salir</Button>
+                    <Button color='inherit' onClick={salirSesion}>Salir</Button>
                 </div>
 
                 <div className={classes.seccionMobile}>
-                    <IconButton color='inherit'>
+                    <IconButton color='inherit' onClick={abrirMenuDer}>
                         <MoreVertIcon />
                     </IconButton>
                 </div>
