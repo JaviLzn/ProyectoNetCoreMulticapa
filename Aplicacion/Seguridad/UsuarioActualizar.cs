@@ -24,6 +24,7 @@ namespace Aplicacion.Seguridad
             public string Email { get; set; }
             public string Password { get; set; }
             public string UserName { get; set; }
+            public ImagenGeneral ImagenPerfil { get; set; }
 
         }
 
@@ -72,6 +73,30 @@ namespace Aplicacion.Seguridad
                                                  new { mensaje = "No este email ya está usado por otro usuario." });
                 }
 
+                if (request.ImagenPerfil != null)
+                {
+                    var imagenPerfilActual = await context.Documento.Where(x => x.ObjetoReferencia == new Guid(usuario.Id)).FirstOrDefaultAsync();
+                    if (imagenPerfilActual == null)
+                    {
+                        var imagen = new Documento
+                        {
+                            Contenido = Convert.FromBase64String(request.ImagenPerfil.Data),
+                            Nombre = request.ImagenPerfil.Nombre,
+                            Extension = request.ImagenPerfil.Extension,
+                            ObjetoReferencia = new Guid(usuario.Id),
+                            DocumentoId = Guid.NewGuid(),
+                            FechaCreacion = DateTime.UtcNow
+                        };
+                        context.Documento.Add(imagen);
+                    }
+                    else
+                    {
+                        imagenPerfilActual.Contenido = Convert.FromBase64String(request.ImagenPerfil.Data);
+                        imagenPerfilActual.Nombre = request.ImagenPerfil.Nombre;
+                        imagenPerfilActual.Extension = request.ImagenPerfil.Extension;
+                    }
+                }
+
                 usuario.NombreCompleto = request.NombreCompleto;
                 usuario.PasswordHash = passwordHasher.HashPassword(usuario, request.Password);
                 usuario.Email = request.Email;
@@ -85,7 +110,7 @@ namespace Aplicacion.Seguridad
                 {
                     throw new Exception("No se puedo actualizar el usuario");
                 }
-                
+
                 return new UsuarioData
                 {
                     NombreCompleto = usuario.NombreCompleto,
