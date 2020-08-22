@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ using Dominio;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Persistencia;
 
 namespace Aplicacion.Seguridad
 {
@@ -20,10 +23,12 @@ namespace Aplicacion.Seguridad
             public string Password { get; set; }
         }
 
-        public class EjecutaValidacion : AbstractValidator<Ejecuta> {
-            public EjecutaValidacion(){
-                RuleFor( x => x.Email).NotEmpty();
-                RuleFor( x => x.Password).NotEmpty();
+        public class EjecutaValidacion : AbstractValidator<Ejecuta>
+        {
+            public EjecutaValidacion()
+            {
+                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.Password).NotEmpty();
             }
         }
 
@@ -32,12 +37,13 @@ namespace Aplicacion.Seguridad
             private readonly UserManager<Usuario> userManager;
             private readonly SignInManager<Usuario> signInManager;
             private readonly IJwtGenerador jwtGenerador;
-
-            public Manejador(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IJwtGenerador jwtGenerador)
+            private readonly CursosOnlineContext context;
+            public Manejador(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IJwtGenerador jwtGenerador, CursosOnlineContext context)
             {
                 this.userManager = userManager;
                 this.signInManager = signInManager;
                 this.jwtGenerador = jwtGenerador;
+                this.context = context;
             }
             public async Task<UsuarioData> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
@@ -50,16 +56,29 @@ namespace Aplicacion.Seguridad
 
                 var rolesUsuario = await userManager.GetRolesAsync(usuario);
                 var listaRoles = new List<string>(rolesUsuario);
-                
-                
+
+                var imagenPerfil = await context.Documento.Where(x => x.ObjetoReferencia == new Guid(usuario.Id)).FirstOrDefaultAsync();
+
+                ImagenGeneral imagenCliente = null;
+                if (imagenPerfil != null)
+                {
+                    imagenCliente = new ImagenGeneral
+                    {
+                        Data = Convert.ToBase64String(imagenPerfil.Contenido),
+                        Extension = imagenPerfil.Extension,
+                        Nombre = imagenPerfil.Nombre
+                    };
+                }
+
                 if (resultado.Succeeded)
                 {
-                    return new UsuarioData {
+                    return new UsuarioData
+                    {
                         NombreCompleto = usuario.NombreCompleto,
                         Token = jwtGenerador.CrearToken(usuario, listaRoles),
                         UserName = usuario.UserName,
                         Email = usuario.Email,
-                        Imagen = null
+                        ImagenPerfil = imagenCliente
                     };
                 }
 

@@ -106,6 +106,19 @@ namespace Aplicacion.Seguridad
                 var roles = await userManager.GetRolesAsync(usuario);
                 var listaRoles = new List<string>(roles);
 
+                var imagenPerfil = await context.Documento.Where(x => x.ObjetoReferencia == new Guid(usuario.Id)).FirstOrDefaultAsync();
+                ImagenGeneral imagenGeneral = null;
+
+                if (imagenPerfil != null)
+                {
+                    imagenGeneral = new ImagenGeneral
+                    {
+                        Data = Convert.ToBase64String(imagenPerfil.Contenido),
+                        Nombre = imagenPerfil.Nombre,
+                        Extension = imagenPerfil.Extension
+                    };
+                }
+
                 if (!resultado.Succeeded)
                 {
                     throw new Exception("No se puedo actualizar el usuario");
@@ -116,7 +129,8 @@ namespace Aplicacion.Seguridad
                     NombreCompleto = usuario.NombreCompleto,
                     Token = jwtGenerador.CrearToken(usuario, listaRoles),
                     Email = usuario.Email,
-                    UserName = usuario.UserName
+                    UserName = usuario.UserName,
+                    ImagenPerfil = imagenGeneral
                 };
             }
         }
