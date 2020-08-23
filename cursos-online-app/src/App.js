@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
@@ -13,11 +13,18 @@ import { Snackbar } from '@material-ui/core';
 function App() {
     const [{ openSnackbar }, dispatch] = useStateValue();
 
-    useEffect(() => {
-        obtenerUsuarioActual(dispatch);
-    }, []);
+    const [iniciaApp, setIniciaApp] = useState(false);
 
-    return (
+    useEffect(() => {
+        if (!iniciaApp) {
+            obtenerUsuarioActual(dispatch)
+                .then(() => setIniciaApp(true))
+                .catch(() => setIniciaApp(true));
+        }
+        // eslint-disable-next-line
+    }, [iniciaApp]);
+
+    return iniciaApp === false ? null : (
         <React.Fragment>
             <Snackbar
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

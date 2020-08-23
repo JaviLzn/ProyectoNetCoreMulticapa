@@ -6,7 +6,7 @@ const MenuDerecha = ({ classes, salirSesion, usuario }) => (
     <Fragment>
         <List>
             <ListItem button>
-                <Avatar src={usuario ? usuario.foto : ''} />
+                <Avatar src={usuario.ImagenPerfil} />
                 <ListItemText classes={{ primary: classes.listItemText }} primary={usuario ? usuario.NombreCompleto : ''} />
             </ListItem>
             <ListItem button onClick={salirSesion}>

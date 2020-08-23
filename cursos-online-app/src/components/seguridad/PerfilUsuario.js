@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import style from '../Tool/Style';
 import { Container, Typography, Grid, TextField, Button, Avatar } from '@material-ui/core';
-import { obtenerUsuarioActual, actualizarUsuario } from '../../actions/UsuarioAction';
+import { actualizarUsuario } from '../../actions/UsuarioAction';
 import { useStateValue } from '../../context/store';
 import { v4 as uuidv4 } from 'uuid';
 import ImageUploader from 'react-images-upload';
 import { obtenerDataImagen } from '../../actions/ImagenAction';
 
+
 const PerfilUsuario = () => {
-    const [, dispatch] = useStateValue();
+    const [{ sesionUsuario }, dispatch] = useStateValue();
 
     const [usuario, setUsuario] = useState({
         NombreCompleto: '',
@@ -26,10 +27,9 @@ const PerfilUsuario = () => {
     };
 
     useEffect(() => {
-        obtenerUsuarioActual(dispatch).then((response) => {
-            console.log('response obtenerUsuarioActual :>> ', response);
-            setUsuario(response.data);
-        });
+        setUsuario(sesionUsuario.usuario);
+        setUsuario((anterior) => ({ ...anterior, FotoUrl: sesionUsuario.usuario.ImagenPerfil }));
+        // eslint-disable-next-line
     }, []);
 
     const guardarUsuario = (e) => {

@@ -6,8 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 import { useStateValue } from '../../../context/store';
 import MenuIzquierda from './MenuIzquierda';
 import MenuDerecha from './MenuDerecha';
-import { useHistory } from "react-router-dom";
-
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     seccionDesktop: {
@@ -56,7 +55,7 @@ const BarSesion = () => {
 
     const salirSesion = () => {
         localStorage.removeItem('token_seguridad');
-        history.push("/auth/login");
+        history.push('/auth/login');
     };
 
     return (
@@ -68,7 +67,7 @@ const BarSesion = () => {
             </Drawer>
             <Drawer anchor='right' open={menuDer} onClose={cerrarMenuDer}>
                 <div className={classes.list} onClick={cerrarMenuDer} onKeyDown={cerrarMenuDer}>
-                    <MenuDerecha classes={classes} usuario={sesionUsuario ? sesionUsuario.usuario : null} salirSesion={salirSesion}/>
+                    <MenuDerecha classes={classes} usuario={sesionUsuario ? sesionUsuario.usuario : null} salirSesion={salirSesion} />
                 </div>
             </Drawer>
             <Toolbar>
@@ -81,8 +80,10 @@ const BarSesion = () => {
 
                 <div className={classes.seccionDesktop}>
                     <Button color='inherit'>{sesionUsuario ? sesionUsuario.usuario.NombreCompleto : ''}</Button>
-                    <Avatar />
-                    <Button color='inherit' onClick={salirSesion}>Salir</Button>
+                    <Avatar src={sesionUsuario.usuario.ImagenPerfil} />
+                    <Button color='inherit' onClick={salirSesion}>
+                        Salir
+                    </Button>
                 </div>
 
                 <div className={classes.seccionMobile}>
