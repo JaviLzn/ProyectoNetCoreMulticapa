@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import style from '../Tool/Style';
-import { Container, Typography, Grid, TextField, Button } from '@material-ui/core';
+import { Container, Typography, Grid, TextField, Button, Avatar } from '@material-ui/core';
 import { obtenerUsuarioActual, actualizarUsuario } from '../../actions/UsuarioAction';
 import { useStateValue } from '../../context/store';
+import { v4 as uuidv4 } from 'uuid';
+import ImageUploader from 'react-images-upload';
 
 const PerfilUsuario = () => {
     const [, dispatch] = useStateValue();
@@ -13,6 +15,7 @@ const PerfilUsuario = () => {
         UserName: '',
         Password: '',
         ConfirmarPassword: '',
+        Foto: '',
     });
 
     const IngresarValores = (e) => {
@@ -45,9 +48,13 @@ const PerfilUsuario = () => {
         });
     };
 
+    const fotoKey = uuidv4();
+    const subirFoto = imagenes => {};
+
     return (
         <Container component='main' maxWidth='xs' justify='center'>
             <div style={style.paper}>
+                <Avatar style={style.avatar} src={usuario.Foto} />
                 <Typography component='h1' variant='h5'>
                     Perfil del Usuario
                 </Typography>
@@ -67,6 +74,9 @@ const PerfilUsuario = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField name='ConfirmarPassword' onChange={IngresarValores} type='password' variant='outlined' fullWidth label='Confirmar contraseña' />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ImageUploader withIcon={false} key={fotoKey} singleImage={true} buttonText='Seleccione una imagen de perfil' onChange={subirFoto} imgExtension={['.jpg', '.gif', '.png', '.jpeg']} maxFileSize={5242880} />
                         </Grid>
                     </Grid>
                     <Grid container justify='center'>
