@@ -5,6 +5,7 @@ import { obtenerUsuarioActual, actualizarUsuario } from '../../actions/UsuarioAc
 import { useStateValue } from '../../context/store';
 import { v4 as uuidv4 } from 'uuid';
 import ImageUploader from 'react-images-upload';
+import { obtenerDataImagen } from '../../actions/ImagenAction';
 
 const PerfilUsuario = () => {
     const [, dispatch] = useStateValue();
@@ -15,7 +16,7 @@ const PerfilUsuario = () => {
         UserName: '',
         Password: '',
         ConfirmarPassword: '',
-        Foto: '',
+        ImagenPerfil: null,
         FotoUrl: '',
     });
 
@@ -50,11 +51,13 @@ const PerfilUsuario = () => {
     };
 
     const fotoKey = uuidv4();
-    const subirFoto = imagenes => {
+    const subirFoto = (imagenes) => {
         const foto = imagenes[0];
-        const fotoUrl = URL.createObjectURL(foto);
+        const FotoUrl = URL.createObjectURL(foto);
 
-        setUsuario({ ...usuario, Foto: foto, FotoUrl: fotoUrl });
+        obtenerDataImagen(foto).then((respuesta) => {
+            setUsuario({ ...usuario, ImagenPerfil: respuesta, FotoUrl });
+        });
     };
 
     return (
