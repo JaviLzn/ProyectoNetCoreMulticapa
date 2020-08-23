@@ -16,6 +16,7 @@ const PerfilUsuario = () => {
         Password: '',
         ConfirmarPassword: '',
         Foto: '',
+        FotoUrl: '',
     });
 
     const IngresarValores = (e) => {
@@ -49,12 +50,17 @@ const PerfilUsuario = () => {
     };
 
     const fotoKey = uuidv4();
-    const subirFoto = imagenes => {};
+    const subirFoto = imagenes => {
+        const foto = imagenes[0];
+        const fotoUrl = URL.createObjectURL(foto);
+
+        setUsuario({ ...usuario, Foto: foto, FotoUrl: fotoUrl });
+    };
 
     return (
         <Container component='main' maxWidth='xs' justify='center'>
             <div style={style.paper}>
-                <Avatar style={style.avatar} src={usuario.Foto} />
+                <Avatar style={style.avatar} src={usuario.FotoUrl ? usuario.FotoUrl : null} />
                 <Typography component='h1' variant='h5'>
                     Perfil del Usuario
                 </Typography>
@@ -76,7 +82,7 @@ const PerfilUsuario = () => {
                             <TextField name='ConfirmarPassword' onChange={IngresarValores} type='password' variant='outlined' fullWidth label='Confirmar contraseña' />
                         </Grid>
                         <Grid item xs={12}>
-                            <ImageUploader withIcon={false} key={fotoKey} singleImage={true} buttonText='Seleccione una imagen de perfil' onChange={subirFoto} imgExtension={['.jpg', '.gif', '.png', '.jpeg']} maxFileSize={5242880} />
+                            <ImageUploader withIcon={false} key={fotoKey} singleImage={true} buttonText='Seleccione una imagen de perfil' onChange={subirFoto} imgExtension={['.jpg', '.gif', '.png', '.jpeg']} maxFileSize={5242880} label={`Tamaño máximo de archivo: 5Mb. Acepta: jpg | gif | png | jpeg`} />
                         </Grid>
                     </Grid>
                     <Grid container justify='center'>
