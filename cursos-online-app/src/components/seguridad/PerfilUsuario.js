@@ -34,7 +34,7 @@ const PerfilUsuario = () => {
 
     const guardarUsuario = (e) => {
         e.preventDefault();
-        actualizarUsuario(usuario).then((response) => {
+        actualizarUsuario(usuario, dispatch).then((response) => {
             if (response.status === 200) {
                 dispatch({
                     type: 'OPEN_SNACKBAR',

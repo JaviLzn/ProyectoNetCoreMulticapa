@@ -14,8 +14,7 @@ export const register = (usuario) => {
 export const obtenerUsuarioActual = (dispatch) => {
     return new Promise((resolve, reject) =>
         HttpCliente.get('/Usuario').then((response) => {
-
-            if(response.data && response.data.ImagenPerfil){
+            if (response.data && response.data.ImagenPerfil) {
                 let fotoPerfil = response.data.ImagenPerfil;
                 const nuevoArchivo = `data:image/${fotoPerfil.Extension};base64,${fotoPerfil.Data}`;
                 response.data.ImagenPerfil = nuevoArchivo;
@@ -31,10 +30,24 @@ export const obtenerUsuarioActual = (dispatch) => {
     );
 };
 
-export const actualizarUsuario = (usuario) => {
+export const actualizarUsuario = (usuario, dispatch) => {
     return new Promise((resolve, reject) => {
         HttpCliente.put('/Usuario', usuario)
-            .then((response) => resolve(response))
+            .then((response) => {
+                if (response.data && response.data.ImagenPerfil) {
+                    let fotoPerfil = response.data.ImagenPerfil;
+                    const nuevoArchivo = `data:image/${fotoPerfil.Extension};base64,${fotoPerfil.Data}`;
+                    response.data.ImagenPerfil = nuevoArchivo;
+                }
+
+                dispatch({
+                    type: 'INICIAR_SESION',
+                    sesion: response.data,
+                    autenticado: true,
+                });
+                
+                resolve(response);
+            })
             .catch((err) => {
                 resolve(err.response);
             });
