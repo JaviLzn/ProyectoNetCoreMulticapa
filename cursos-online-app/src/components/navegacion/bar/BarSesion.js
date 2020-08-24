@@ -43,7 +43,7 @@ const BarSesion = () => {
     const classes = useStyles();
     let history = useHistory();
 
-    const [{ sesionUsuario }] = useStateValue();
+    const [{ sesionUsuario }, dispatch] = useStateValue();
 
     const [menuIzq, setMenuIzq] = useState(false);
     const [menuDer, setMenuDer] = useState(false);
@@ -55,6 +55,13 @@ const BarSesion = () => {
 
     const salirSesion = () => {
         localStorage.removeItem('token_seguridad');
+
+        dispatch({
+            type: 'SALIR_SESION',
+            nuevoUsuario: null,
+            autenticado: false,
+        });
+
         history.push('/auth/login');
     };
 

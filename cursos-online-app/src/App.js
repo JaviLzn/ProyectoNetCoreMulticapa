@@ -9,6 +9,7 @@ import AppNavbar from './components/navegacion/AppNavbar';
 import { useStateValue } from './context/store';
 import { obtenerUsuarioActual } from './actions/UsuarioAction';
 import { Snackbar } from '@material-ui/core';
+import RutaSegura from './components/navegacion/RutaSegura';
 
 function App() {
     const [{ openSnackbar }, dispatch] = useStateValue();
@@ -43,10 +44,10 @@ function App() {
                 <ThemeProvider theme={theme}>
                     <AppNavbar />
                     <Switch>
-                        <Route exact path='/' component={Login} />
                         <Route exact path='/auth/login' component={Login} />
                         <Route exact path='/auth/registrar' component={RegistrarUsuario} />
-                        <Route exact path='/auth/perfil' component={PerfilUsuario} />
+                        <RutaSegura exact path='/auth/perfil' component={PerfilUsuario} />
+                        <RutaSegura exact path='/' component={PerfilUsuario} />
                     </Switch>
                 </ThemeProvider>
             </Router>

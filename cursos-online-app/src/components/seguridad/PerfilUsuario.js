@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 import ImageUploader from 'react-images-upload';
 import { obtenerDataImagen } from '../../actions/ImagenAction';
 
-
 const PerfilUsuario = () => {
     const [{ sesionUsuario }, dispatch] = useStateValue();
 
@@ -28,7 +27,7 @@ const PerfilUsuario = () => {
 
     useEffect(() => {
         setUsuario(sesionUsuario.usuario);
-        setUsuario((anterior) => ({ ...anterior, FotoUrl: sesionUsuario.usuario.ImagenPerfil }));
+        setUsuario((anterior) => ({ ...anterior, FotoUrl: sesionUsuario.usuario.ImagenPerfil, ImagenPerfil: null }));
         // eslint-disable-next-line
     }, []);
 
