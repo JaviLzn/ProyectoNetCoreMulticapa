@@ -13,6 +13,7 @@ namespace Aplicacion.Cursos
     {
         public class Ejecuta : IRequest
         {
+            public Guid? CursoId { get; set; }
             public string Titulo { get; set; }
             public string Descripcion { get; set; }
             public DateTime? FechaPublicacion { get; set; }
@@ -43,6 +44,10 @@ namespace Aplicacion.Cursos
             {
 
                 Guid cursoId = Guid.NewGuid();
+                if (request.CursoId != null)
+                {
+                    cursoId = request.CursoId ?? Guid.NewGuid();
+                }
 
                 var curso = new Curso
                 {
@@ -70,10 +75,11 @@ namespace Aplicacion.Cursos
 
                 /* Agregar logica para insertar un precio del curso*/
 
-                Precio precio = new Precio {
+                Precio precio = new Precio
+                {
                     CursoId = curso.CursoId,
                     PrecioActual = request.Precio,
-                    Promocion  = request.PrecioPromocion,
+                    Promocion = request.PrecioPromocion,
                     PrecioId = Guid.NewGuid()
                 };
                 context.Precio.Add(precio);

@@ -31,7 +31,7 @@ namespace Aplicacion.Documentos
 
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
-                var documento = await context.Documento.Where(x => x.ObjetoReferencia == request.ObjectoReferencia).FirstAsync();
+                var documento = await context.Documento.Where(x => x.ObjetoReferencia == request.ObjectoReferencia).FirstOrDefaultAsync();
 
                 if (documento == null)
                 {
@@ -41,7 +41,8 @@ namespace Aplicacion.Documentos
                         Nombre = request.Nombre,
                         Extension = request.Extension,
                         DocumentoId = Guid.NewGuid(),
-                        FechaCreacion = DateTime.UtcNow
+                        FechaCreacion = DateTime.UtcNow,
+                        ObjetoReferencia = request.ObjectoReferencia ?? Guid.Empty
                     };
 
                     context.Documento.Add(doc);
