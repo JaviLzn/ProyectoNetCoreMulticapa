@@ -51,7 +51,7 @@ function App() {
                         <RutaSegura exact path='/auth/perfil' component={PerfilUsuario} />
                         <RutaSegura exact path='/' component={PerfilUsuario} />
                         <RutaSegura exact path='/curso/nuevo' component={NuevoCurso} />
-                        <RutaSegura exact path='/curso/paginador' component={PaginadorCurso} />
+                        <RutaSegura exact path='/curso/lista' component={PaginadorCurso} />
                     </Switch>
                 </ThemeProvider>
             </Router>
