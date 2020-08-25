@@ -4,9 +4,14 @@ import { Typography, Container, Grid, TextField, Button } from '@material-ui/cor
 import DateFnsUtils from '@date-io/date-fns';
 import esLocale from 'date-fns/locale/es';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import ImageUploader from 'react-images-upload';
+import { v4 as uuidv4 } from 'uuid';
+import { obtenerDataImagen } from '../../actions/ImagenAction';
 
 const NuevoCurso = () => {
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
+
+    const [imagenCurso, setImagenCurso] = useState(null);
 
     const [curso, setCurso] = useState({
         Titulo: '',
@@ -19,6 +24,16 @@ const NuevoCurso = () => {
         const { name, value } = e.target;
         setCurso((anterior) => ({ ...anterior, [name]: value }));
     };
+
+    const subirFoto = (imagenes) => {
+        var foto = imagenes[0];
+
+        obtenerDataImagen(foto).then((respuesta) => {
+            setImagenCurso(respuesta);
+        });
+    };
+
+    const fotoKey = uuidv4();
 
     return (
         <Container component='main' maxWidth='xs' justify='center'>
@@ -55,6 +70,9 @@ const NuevoCurso = () => {
                                     }}
                                 />
                             </MuiPickersUtilsProvider>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ImageUploader withIcon={false} key={fotoKey} singleImage={true} buttonText='Seleccione una imagen para el curso' onChange={subirFoto} imgExtension={['.jpg', '.gif', '.png', '.jpeg']} maxFileSize={5242880} label={`Tamaño máximo de archivo: 5Mb. Acepta: jpg | gif | png | jpeg`} />
                         </Grid>
                     </Grid>
                     <Grid container justify='center'>
