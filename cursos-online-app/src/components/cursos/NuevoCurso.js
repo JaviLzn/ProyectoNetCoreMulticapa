@@ -7,6 +7,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import ImageUploader from 'react-images-upload';
 import { v4 as uuidv4 } from 'uuid';
 import { obtenerDataImagen } from '../../actions/ImagenAction';
+import { guardarCurso } from '../../actions/CursoAction';
 
 const NuevoCurso = () => {
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
@@ -17,7 +18,7 @@ const NuevoCurso = () => {
         Titulo: '',
         Descripcion: '',
         Precio: 0.0,
-        Promocion: 0.0,
+        PrecioPromocion: 0.0,
     });
 
     const cargarValoresCurso = (e) => {
@@ -30,6 +31,31 @@ const NuevoCurso = () => {
 
         obtenerDataImagen(foto).then((respuesta) => {
             setImagenCurso(respuesta);
+        });
+    };
+
+    const guardarCursoBoton = (e) => {
+        e.preventDefault();
+        const CursoId = uuidv4();
+
+        const objetoCurso = {
+            Titulo: curso.Titulo,
+            Descripcion: curso.Descripcion,
+            Precio: parseFloat(curso.Precio || 0.0),
+            PrecioPromocion: parseFloat(curso.PrecioPromocion || 0.0),
+            FechaPublicacion: fechaSeleccionada,
+            CursoId,
+        };
+
+        const objetoImagen = {
+            ObjectoReferencia: CursoId,
+            Data: imagenCurso.Data,
+            Nombre: imagenCurso.Nombre,
+            Extension: imagenCurso.Extension,
+        };
+
+        guardarCurso(objetoCurso, objetoImagen).then((respuestas) => {
+            console.log('respuestas arreglo:>> ', respuestas);
         });
     };
 
@@ -53,7 +79,7 @@ const NuevoCurso = () => {
                             <TextField name='Precio' value={curso.Precio} onChange={cargarValoresCurso} variant='outlined' fullWidth label='Ingrese Precio Normal' />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField name='Promocion' value={curso.Promocion} onChange={cargarValoresCurso} variant='outlined' fullWidth label='Ingrese Precio de promoción' />
+                            <TextField name='PrecioPromocion' value={curso.PrecioPromocion} onChange={cargarValoresCurso} variant='outlined' fullWidth label='Ingrese Precio de promoción' />
                         </Grid>
                         <Grid item xs={12}>
                             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
@@ -77,7 +103,7 @@ const NuevoCurso = () => {
                     </Grid>
                     <Grid container justify='center'>
                         <Grid item xs={12}>
-                            <Button type='submit' fullWidth variant='contained' color='primary' size='large' style={style.submit}>
+                            <Button type='submit' onClick={guardarCursoBoton} fullWidth variant='contained' color='primary' size='large' style={style.submit}>
                                 Guardar Curso
                             </Button>
                         </Grid>
