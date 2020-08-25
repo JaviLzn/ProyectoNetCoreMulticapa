@@ -8,8 +8,10 @@ import ImageUploader from 'react-images-upload';
 import { v4 as uuidv4 } from 'uuid';
 import { obtenerDataImagen } from '../../actions/ImagenAction';
 import { guardarCurso } from '../../actions/CursoAction';
+import { useStateValue } from '../../context/store';
 
 const NuevoCurso = () => {
+    const [, dispatch] = useStateValue();
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
 
     const [imagenCurso, setImagenCurso] = useState(null);
@@ -20,6 +22,17 @@ const NuevoCurso = () => {
         Precio: 0.0,
         PrecioPromocion: 0.0,
     });
+
+    const resetearForm = () => {
+        setFechaSeleccionada(new Date());
+        setImagenCurso(null);
+        setCurso({
+            Titulo: '',
+            Descripcion: '',
+            Precio: 0.0,
+            PrecioPromocion: 0.0,
+        });
+    };
 
     const cargarValoresCurso = (e) => {
         const { name, value } = e.target;
@@ -36,6 +49,9 @@ const NuevoCurso = () => {
 
     const guardarCursoBoton = (e) => {
         e.preventDefault();
+
+        //Validaciones
+
         const CursoId = uuidv4();
 
         const objetoCurso = {
@@ -47,15 +63,45 @@ const NuevoCurso = () => {
             CursoId,
         };
 
-        const objetoImagen = {
-            ObjectoReferencia: CursoId,
-            Data: imagenCurso.Data,
-            Nombre: imagenCurso.Nombre,
-            Extension: imagenCurso.Extension,
-        };
+        let objetoImagen = null;
+        if (imagenCurso) {
+            objetoImagen = {
+                ObjectoReferencia: CursoId,
+                Data: imagenCurso.Data,
+                Nombre: imagenCurso.Nombre,
+                Extension: imagenCurso.Extension,
+            };
+        }
 
         guardarCurso(objetoCurso, objetoImagen).then((respuestas) => {
             console.log('respuestas arreglo:>> ', respuestas);
+
+            const responseCurso = respuestas[0];
+            const responseImagen = respuestas[1];
+
+            let mensaje = '';
+            if (responseCurso.status === 200) {
+                mensaje += 'Se guardó exitosamente el curso.';
+                resetearForm();
+            } else {
+                mensaje += 'Errores: ' + Object.keys(responseCurso.response.data.errors);
+            }
+
+            if (responseImagen) {
+                if (responseImagen.status === 200) {
+                    mensaje += ' Se guardó la imagen correctamente.';
+                } else {
+                    mensaje += ' Errores en imagen: ' + Object.keys(responseCurso.response.data.errors);
+                }
+            }
+
+            dispatch({
+                type: 'OPEN_SNACKBAR',
+                openMensaje: {
+                    open: true,
+                    mensaje,
+                },
+            });
         });
     };
 
