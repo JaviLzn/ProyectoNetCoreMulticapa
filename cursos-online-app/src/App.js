@@ -11,6 +11,7 @@ import { obtenerUsuarioActual } from './actions/UsuarioAction';
 import { Snackbar } from '@material-ui/core';
 import RutaSegura from './components/navegacion/RutaSegura';
 import NuevoCurso from './components/cursos/NuevoCurso';
+import PaginadorCurso from './components/cursos/PaginadorCurso';
 
 function App() {
     const [{ openSnackbar }, dispatch] = useStateValue();
@@ -50,6 +51,7 @@ function App() {
                         <RutaSegura exact path='/auth/perfil' component={PerfilUsuario} />
                         <RutaSegura exact path='/' component={PerfilUsuario} />
                         <RutaSegura exact path='/curso/nuevo' component={NuevoCurso} />
+                        <RutaSegura exact path='/curso/paginador' component={PaginadorCurso} />
                     </Switch>
                 </ThemeProvider>
             </Router>

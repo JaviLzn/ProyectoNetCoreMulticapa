@@ -7,8 +7,16 @@ export const guardarCurso = async (curso, imagen) => {
     if (imagen) {
         const endPointImagen = '/Documento';
         const promesaImagen = HttpCliente.post(endPointImagen, imagen);
-        return await (await Promise.all([promesaCurso, promesaImagen].map(p => p.catch(e => e))));
+        return await Promise.all([promesaCurso, promesaImagen].map((p) => p.catch((e) => e)));
     }
 
-    return await Promise.all([promesaCurso].map(p => p.catch(e => e)));
+    return await Promise.all([promesaCurso].map((p) => p.catch((e) => e)));
+};
+
+export const paginacionCurso = (paginador) => {
+    return new Promise((resolve, reject) => {
+        HttpCliente.post('/Cursos/report', paginador).then((response) => {
+            resolve(response);
+        });
+    });
 };
