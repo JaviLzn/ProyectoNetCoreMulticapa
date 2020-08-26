@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { paginacionCurso } from '../../actions/CursoAction';
-import { TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, TablePagination, Hidden } from '@material-ui/core';
+import { TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, TablePagination, Hidden, Grid, TextField, Container } from '@material-ui/core';
 
 const PaginadorCurso = () => {
     const [paginadorRequest, setPaginadorRequest] = useState({
@@ -38,7 +38,12 @@ const PaginadorCurso = () => {
     }
 
     return (
-        <Fragment>
+        <Container component='main' style={{padding:'10px', width:'100%'}}>
+            <Grid container style={{paddingTop:'20px', paddingBottom:'20px'}}>
+                <Grid item xs={12}>
+                    <TextField fullWidth name='textoBusquedaCurso' variant='outlined' label='Busca tu curso' />
+                </Grid>
+            </Grid>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -76,7 +81,7 @@ const PaginadorCurso = () => {
                 onChangeRowsPerPage={cambiarCantidadRegistros}
                 labelRowsPerPage='Cursos por página'
             />
-        </Fragment>
+        </Container>
     );
 };
 
