@@ -1,8 +1,12 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { paginacionCurso } from '../../actions/CursoAction';
 import { TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, TablePagination, Hidden, Grid, TextField, Container } from '@material-ui/core';
+import ControlTyping from '../Tool/ControlTyping';
 
 const PaginadorCurso = () => {
+    const [textoBusquedaCurso, setTextoBusquedaCurso] = useState('');
+    const typingBuscadorTexto = ControlTyping(textoBusquedaCurso, 800);
+
     const [paginadorRequest, setPaginadorRequest] = useState({
         Titulo: '',
         NumeroPagina: 0,
@@ -16,18 +20,25 @@ const PaginadorCurso = () => {
     });
 
     useEffect(() => {
-        const objetoPaginadorRequest = {
-            Titulo: paginadorRequest.Titulo,
-            NumeroPagina: paginadorRequest.NumeroPagina + 1,
-            ElementosPagina: paginadorRequest.ElementosPagina,
-        };
-
         const obtenerListaCurso = async () => {
+            let Titulo = '';
+            let NumeroPagina = paginadorRequest.NumeroPagina + 1;
+            if (typingBuscadorTexto) {
+                Titulo = typingBuscadorTexto;
+                NumeroPagina = 1;
+            }
+
+            const objetoPaginadorRequest = {
+                Titulo,
+                NumeroPagina,
+                ElementosPagina: paginadorRequest.ElementosPagina,
+            };
+
             const response = await paginacionCurso(objetoPaginadorRequest);
             setPaginadorReponse(response.data);
         };
         obtenerListaCurso();
-    }, [paginadorRequest]);
+    }, [paginadorRequest, typingBuscadorTexto]);
 
     const cambiarPagina = (event, nuevaPagina) => {
         setPaginadorRequest((anterior) => ({ ...anterior, NumeroPagina: parseInt(nuevaPagina) }))
@@ -38,10 +49,10 @@ const PaginadorCurso = () => {
     }
 
     return (
-        <Container component='main' style={{padding:'10px', width:'100%'}}>
-            <Grid container style={{paddingTop:'20px', paddingBottom:'20px'}}>
+        <Container component='main' style={{ padding: '10px', width: '100%' }}>
+            <Grid container style={{ paddingTop: '20px', paddingBottom: '20px' }}>
                 <Grid item xs={12}>
-                    <TextField fullWidth name='textoBusquedaCurso' variant='outlined' label='Busca tu curso' />
+                    <TextField onChange={e => setTextoBusquedaCurso(e.target.value)} fullWidth name='textoBusquedaCurso' variant='outlined' label='Busca tu curso' />
                 </Grid>
             </Grid>
             <TableContainer component={Paper}>
