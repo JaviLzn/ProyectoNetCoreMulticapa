@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:5000/api';
+// axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = 'https://cursosonlinecore.azurewebsites.net/api';
 
 // * Si existe el token en el local storage lo asigna al request
 axios.interceptors.request.use(

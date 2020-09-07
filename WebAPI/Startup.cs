@@ -152,7 +152,15 @@ namespace WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=home}/{action=Index}/{id?}"
+                );
+                endpoints.MapFallbackToController("Index", "Home");
             });
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             // * Se configura Swagger UI
             app.UseSwagger();
