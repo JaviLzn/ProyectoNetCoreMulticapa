@@ -1,10 +1,10 @@
+using Aplicacion.ManejadorError;
+using MediatR;
+using Persistencia.DapperConexion.Instructor;
 using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Aplicacion.ManejadorError;
-using MediatR;
-using Persistencia.DapperConexion.Instructor;
 
 namespace Aplicacion.Instructores
 {
@@ -30,7 +30,7 @@ namespace Aplicacion.Instructores
 
                 if (instructor == null)
                 {
-                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = "No se encontró el instructor"});
+                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = "No se encontró el instructor" });
                 }
 
                 return instructor;

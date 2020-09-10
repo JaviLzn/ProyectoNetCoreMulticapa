@@ -1,9 +1,9 @@
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Persistencia.DapperConexion.Instructor;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Instructores
 {
@@ -22,7 +22,7 @@ namespace Aplicacion.Instructores
 
             public async Task<List<InstructorModel>> Handle(Peticion request, CancellationToken cancellationToken)
             {
-                var resultado =  await instructorRepositorio.ObtenerLista();
+                var resultado = await instructorRepositorio.ObtenerLista();
                 return resultado.ToList();
             }
         }

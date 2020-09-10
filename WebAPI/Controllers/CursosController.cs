@@ -1,14 +1,10 @@
-using System.Security.Cryptography.X509Certificates;
-using System.Runtime.InteropServices;
+using Aplicacion.Cursos;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Persistencia.DapperConexion.Paginacion;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aplicacion.Cursos;
-using Dominio;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Persistencia.DapperConexion.Paginacion;
 
 namespace WebAPI.Controllers
 {
@@ -34,18 +30,21 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public  async Task<ActionResult<Unit>> EditarCurso (Guid id, Editar.Ejecuta datos){
+        public async Task<ActionResult<Unit>> EditarCurso(Guid id, Editar.Ejecuta datos)
+        {
             datos.CursoId = id;
             return await Mediator.Send(datos);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unit>> EliminarCurso (Guid id) {
-            return await Mediator.Send(new Eliminar.Ejecuta{Id = id});
+        public async Task<ActionResult<Unit>> EliminarCurso(Guid id)
+        {
+            return await Mediator.Send(new Eliminar.Ejecuta { Id = id });
         }
 
         [HttpPost("report")]
-        public async Task<ActionResult<PaginacionModel>> Report (PaginacionCurso.Ejecuta data){
+        public async Task<ActionResult<PaginacionModel>> Report(PaginacionCurso.Ejecuta data)
+        {
             return await Mediator.Send(data);
         }
     }

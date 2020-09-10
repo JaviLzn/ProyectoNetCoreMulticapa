@@ -1,13 +1,12 @@
-using System;
-using System.Data.Common;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using Aplicacion.ManejadorError;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Cursos
 {

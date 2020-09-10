@@ -1,6 +1,6 @@
-using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
+using System.Data;
 
 namespace Persistencia.DapperConexion
 {
@@ -23,7 +23,8 @@ namespace Persistencia.DapperConexion
 
         public IDbConnection GetConnection()
         {
-            if(dapperConnection == null){
+            if (dapperConnection == null)
+            {
                 dapperConnection = new SqlConnection(config.Value.CursosOnline);
             }
 

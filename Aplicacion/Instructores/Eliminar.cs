@@ -1,14 +1,15 @@
+using MediatR;
+using Persistencia.DapperConexion.Instructor;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using Persistencia.DapperConexion.Instructor;
 
 namespace Aplicacion.Instructores
 {
     public class Eliminar
     {
-        public class BorrarInstructor : IRequest {
+        public class BorrarInstructor : IRequest
+        {
             public Guid Id { get; set; }
         }
 

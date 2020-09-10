@@ -1,19 +1,20 @@
-using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using Aplicacion.ManejadorError;
 using Dominio;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Seguridad
 {
     public class UsuarioRolAgregar
     {
-        public class Ejecuta :IRequest{
-            public string UserName { get; set; }    
+        public class Ejecuta : IRequest
+        {
+            public string UserName { get; set; }
             public string RolNombre { get; set; }
 
         }
@@ -38,18 +39,18 @@ namespace Aplicacion.Seguridad
                 this.roleManager = roleManager;
             }
 
-            public async  Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
                 var rol = await roleManager.FindByNameAsync(request.RolNombre);
                 if (rol == null)
                 {
-                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = "No se encuentra el rol"});
+                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = "No se encuentra el rol" });
                 }
 
                 var usuario = await userManager.FindByNameAsync(request.UserName);
                 if (usuario == null)
                 {
-                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = "No se encuentra el usuario"});
+                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = "No se encuentra el usuario" });
                 }
 
                 var resultado = await userManager.AddToRoleAsync(usuario, rol.Name);

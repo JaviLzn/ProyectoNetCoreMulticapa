@@ -1,17 +1,18 @@
-using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using Aplicacion.ManejadorError;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Seguridad
 {
     public class RolEliminar
     {
-        public class Ejecuta : IRequest{
+        public class Ejecuta : IRequest
+        {
             public string Nombre { get; set; }
         }
 
@@ -37,7 +38,7 @@ namespace Aplicacion.Seguridad
                 var rol = await roleManager.FindByNameAsync(request.Nombre);
                 if (rol == null)
                 {
-                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "No existe el error"});
+                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "No existe el error" });
                 }
 
                 var resultado = await roleManager.DeleteAsync(rol);
@@ -46,7 +47,7 @@ namespace Aplicacion.Seguridad
                 {
                     return Unit.Value;
                 }
-            
+
                 throw new Exception("No se pudo eliminar el rol");
             }
         }

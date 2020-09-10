@@ -1,10 +1,10 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Dominio;
 using FluentValidation;
 using MediatR;
 using Persistencia;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Comentarios
 {
@@ -40,7 +40,8 @@ namespace Aplicacion.Comentarios
 
             public async Task<Unit> Handle(CrearComentario request, CancellationToken cancellationToken)
             {
-                var comentario = new Comentario{
+                var comentario = new Comentario
+                {
                     ComentarioId = Guid.NewGuid(),
                     Alumno = request.Alumno,
                     ComentarioTexto = request.Comentario,

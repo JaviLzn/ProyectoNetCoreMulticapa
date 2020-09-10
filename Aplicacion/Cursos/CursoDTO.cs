@@ -12,7 +12,7 @@ namespace Aplicacion.Cursos
         public byte[] FotoPortada { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public List<InstructorDTO> Instructores { get; set; }
-        public PrecioDTO Precio {get; set;}
+        public PrecioDTO Precio { get; set; }
         public List<ComentarioDTO> Comentarios { get; set; }
     }
 }

@@ -1,17 +1,18 @@
-using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using Aplicacion.ManejadorError;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Seguridad
 {
     public class RolNuevo
     {
-        public class Ejecuta: IRequest{
+        public class Ejecuta : IRequest
+        {
             public string Nombre { get; set; }
         }
 
@@ -19,7 +20,7 @@ namespace Aplicacion.Seguridad
         {
             public ValidarEjecutar()
             {
-                RuleFor(x=> x.Nombre).NotEmpty();
+                RuleFor(x => x.Nombre).NotEmpty();
             }
         }
 
@@ -37,7 +38,7 @@ namespace Aplicacion.Seguridad
                 var rol = await roleManager.FindByNameAsync(request.Nombre);
                 if (rol != null)
                 {
-                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "Ya existe el rol"});
+                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "Ya existe el rol" });
                 }
 
                 var resultado = await roleManager.CreateAsync(new IdentityRole(request.Nombre));

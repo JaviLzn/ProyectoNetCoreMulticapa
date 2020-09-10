@@ -1,9 +1,9 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Persistencia.DapperConexion.Instructor;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Instructores
 {

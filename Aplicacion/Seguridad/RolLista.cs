@@ -1,16 +1,15 @@
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Seguridad
 {
     public class RolLista
     {
-         public class Ejecuta: IRequest<List<IdentityRole>>{}
+        public class Ejecuta : IRequest<List<IdentityRole>> { }
 
         public class ManejarEjecuta : IRequestHandler<Ejecuta, List<IdentityRole>>
         {

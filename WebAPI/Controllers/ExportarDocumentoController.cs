@@ -1,8 +1,8 @@
-using System.IO;
-using System.Threading.Tasks;
 using Aplicacion.Cursos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
@@ -10,7 +10,8 @@ namespace WebAPI.Controllers
     public class ExportarDocumentoController : MiControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<Stream>> GetTask(){
+        public async Task<ActionResult<Stream>> GetTask()
+        {
             return await Mediator.Send(new ExportPDF.Consulta());
         }
     }

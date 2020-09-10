@@ -1,13 +1,12 @@
+using Aplicacion.ManejadorError;
+using AutoMapper;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Persistencia;
 using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Aplicacion.ManejadorError;
-using AutoMapper;
-using Dominio;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistencia;
 
 namespace Aplicacion.Cursos
 {
@@ -36,7 +35,7 @@ namespace Aplicacion.Cursos
                     .Include(y => y.Comentarios)
                     .Include(x => x.InstructoresLink)
                         .ThenInclude(x => x.Instructor)
-                    .FirstOrDefaultAsync(x=> x.CursoId == request.Id);
+                    .FirstOrDefaultAsync(x => x.CursoId == request.Id);
 
                 if (curso is null)
                 {

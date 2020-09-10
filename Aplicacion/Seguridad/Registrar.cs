@@ -1,8 +1,3 @@
-using System;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using Aplicacion.Contratos;
 using Aplicacion.ManejadorError;
 using Dominio;
@@ -11,6 +6,11 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Seguridad
 {
@@ -24,7 +24,8 @@ namespace Aplicacion.Seguridad
             public string UserName { get; set; }
         }
 
-        public class EjecutaValidador : AbstractValidator<Ejecuta>{
+        public class EjecutaValidador : AbstractValidator<Ejecuta>
+        {
 
             public EjecutaValidador()
             {
@@ -53,16 +54,17 @@ namespace Aplicacion.Seguridad
                 var existeEmail = await context.Users.Where(x => x.Email == request.Email).AnyAsync();
                 if (existeEmail)
                 {
-                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "El Email se encuentra en uso."});
+                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "El Email se encuentra en uso." });
                 };
 
                 var existeUserName = await context.Users.Where(x => x.UserName == request.UserName).AnyAsync();
                 if (existeUserName)
                 {
-                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "El Nombre de Usuario ya se encuentra en uso."});
+                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, new { mensaje = "El Nombre de Usuario ya se encuentra en uso." });
                 };
 
-                var usuario = new Usuario {
+                var usuario = new Usuario
+                {
                     NombreCompleto = request.NombreCompleto,
                     Email = request.Email,
                     UserName = request.UserName
@@ -72,15 +74,17 @@ namespace Aplicacion.Seguridad
 
                 if (resultado.Succeeded)
                 {
-                   return new UsuarioData {
-                       NombreCompleto = usuario.NombreCompleto,
-                       Token = jwtGenerador.CrearToken(usuario, null),
-                       UserName = usuario.UserName,
-                       Email = usuario.Email
-                   };
-                } else if(resultado.Errors.Count()  >0)
+                    return new UsuarioData
+                    {
+                        NombreCompleto = usuario.NombreCompleto,
+                        Token = jwtGenerador.CrearToken(usuario, null),
+                        UserName = usuario.UserName,
+                        Email = usuario.Email
+                    };
+                }
+                else if (resultado.Errors.Count() > 0)
                 {
-                     throw new ManejadorExcepcion(HttpStatusCode.BadRequest, resultado.Errors);
+                    throw new ManejadorExcepcion(HttpStatusCode.BadRequest, resultado.Errors);
                 }
 
                 throw new Exception("No se pudo agregar el nuevo usuario");

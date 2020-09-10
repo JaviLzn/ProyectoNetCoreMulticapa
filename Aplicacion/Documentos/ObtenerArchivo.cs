@@ -1,12 +1,12 @@
-using System.Net;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Aplicacion.ManejadorError;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
-using Aplicacion.ManejadorError;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Documentos
 {
@@ -28,14 +28,15 @@ namespace Aplicacion.Documentos
 
             public async Task<ArchivoGenerico> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
-                var archivo = await context.Documento.Where( x=> x.ObjetoReferencia == request.Id).FirstOrDefaultAsync();
+                var archivo = await context.Documento.Where(x => x.ObjetoReferencia == request.Id).FirstOrDefaultAsync();
                 if (archivo == null)
                 {
-                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = "No se encontró la imagen"});
+                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { mensaje = "No se encontró la imagen" });
                 }
 
-                var archivoGenerico = new ArchivoGenerico {
-                    Data = Convert.ToBase64String( archivo.Contenido),
+                var archivoGenerico = new ArchivoGenerico
+                {
+                    Data = Convert.ToBase64String(archivo.Contenido),
                     Nombre = archivo.Nombre,
                     Extension = archivo.Extension
                 };

@@ -1,21 +1,19 @@
-using System.Net;
-using System.Reflection.Metadata.Ecma335;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Persistencia.DapperConexion.Instructor;
-using Aplicacion.ManejadorError;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aplicacion.Instructores
 {
     public class Nuevo
     {
-        public class CrearInstructor : IRequest {
+        public class CrearInstructor : IRequest
+        {
             public string Nombre { get; set; }
             public string Apellidos { get; set; }
-            public string  Grado { get; set; }
+            public string Grado { get; set; }
         }
 
         public class ValidarCrearInstructor : AbstractValidator<CrearInstructor>
@@ -38,10 +36,11 @@ namespace Aplicacion.Instructores
 
             public async Task<Unit> Handle(CrearInstructor request, CancellationToken cancellationToken)
             {
-                InstructorModel datos = new InstructorModel {
-                        Nombre = request.Nombre,
-                        Apellidos = request.Apellidos,
-                        Grado = request.Grado
+                InstructorModel datos = new InstructorModel
+                {
+                    Nombre = request.Nombre,
+                    Apellidos = request.Apellidos,
+                    Grado = request.Grado
                 };
                 var resultado = await instructor.Crear(datos);
                 if (resultado > 0)

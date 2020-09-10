@@ -1,7 +1,7 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Dominio;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Persistencia
 {
@@ -17,7 +17,7 @@ namespace Persistencia
                     UserName = "JaviLzn",
                     Email = "jlozanoo@gmail.com"
                 };
-               await usuarioManager.CreateAsync(usuario, "Password123$");
+                await usuarioManager.CreateAsync(usuario, "Password123$");
             }
         }
     }
